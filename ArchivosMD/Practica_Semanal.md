@@ -32,7 +32,10 @@ No se puede serializar `std::string`, porque no guarda el texto dentro de la est
 
 - **Copia por bloques:** Implemente una función que copie un archivo (texto o binario) a otro por bloques de tamaño configurable (ej. 512 bytes). Verifique que el archivo destino tenga exactamente el mismo tamaño que el origen usando `tellg`/`tellp`. Maneje archivo origen inexistente o sin permisos de lectura.
 - **Comparador binario:** Escriba un programa que compare dos archivos binarios byte a byte. Indique si son idénticos o, si no, en qué posición (byte) se encuentra la primera diferencia y cuántas diferencias hay en total. Documente en MD el uso de comprobación de apertura y de estado.
-
+**DOCUMENTACION:**
+Para la comprobacion de apertura se usa good(), esto verifico que el archivo se abra antes de leer o escribir, si no, muestra error.
+Para la comprobacion de estado, se usa gcount() y el estado de stream para saber cuantos bytes se leen y evitar errores.
+  
 ---
 
 **Formato de entrega:** Código y comentarios en **archivo(s) MD (Markdown)**.
