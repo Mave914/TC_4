@@ -2,7 +2,20 @@
 #include <fstream>
 #include <sstream>
 #include <iomanip>
+#include <vector>
 using namespace std;
+
+//Practica semanal Ejercicio 2.1
+struct Registro
+{
+    int id;
+    char nombre[20];
+    double valor;
+};
+
+void escribirBinario(const string& nombreArchivo);
+void leerBinario(const string& nombreArchivo);
+bool leerDesdeOffset(const string& archivo, size_t offset, size_t n, vector<char>& buffer);
 
 int main()
 {
@@ -131,6 +144,108 @@ int main()
     a2.close();
     salida.close();
 
+    cout<<"Escribiendo binario"<<endl;
+    escribirBinario("datos.bin");
+
+    cout<<"Leyendo binario"<<endl;
+    leerBinario("datos.bin");
+
+    cout<<"Leyendo con offset"<<endl;
+    vector<char> buffer;
+
+    if (leerDesdeOffset("datos.bin",0,10,buffer))
+    {
+        cout<<"Bytes leidos: ";
+        for (size_t i = 0; i < buffer.size(); i++)
+        {
+            cout<<(int)buffer[i]<<" ";
+        }
+        cout<<endl;
+    }
+
     return 0;
 }
 
+void escribirBinario(const string& nombreArchivo)
+{
+    ofstream binario(nombreArchivo, ios::binary);
+    if (!binario.good())
+    {
+        cout<<"Error al abrir archivo binario\r\n"<<endl;
+        return;
+    }
+    Registro datos[5] ={
+        {1,"Ana",80.3},
+        {2,"Luis",90.5},
+        {3,"Maria",70.2},
+        {4,"Pedro",72.3},
+        {5,"Juan",84.7},
+    };
+    int cantidad =5;
+    binario.write((char*)&cantidad,sizeof(int));
+    binario.write((char*)datos,sizeof(datos));
+    binario.close();
+}
+
+void leerBinario(const string& nombreArchivo)
+{
+    ifstream binario(nombreArchivo, ios::binary);
+    if (!binario.good())
+    {
+        cout<<"Error al abrir archivo binario\r\n"<<endl;
+        return;
+    }
+
+    int cantidad;
+    binario.read((char*)&cantidad,sizeof(int));
+    if (binario.fail() || cantidad <= 0)
+    {
+        cout<<"Cantidad invalida\r\n"<<endl;
+        return;
+    }
+
+    Registro r;
+    for (int i=0;i<cantidad;i++)
+    {
+        binario.read((char*)&r,sizeof(Registro));
+        if (binario.fail())
+        {
+            cout<<"Error leyendo registro\r\n"<<endl;
+        } else
+        {
+            cout<<r.id<<" - "<<r.nombre<<" - "<<r.valor<<endl;
+        }
+    }
+    binario.close();
+}
+
+bool leerDesdeOffset(const string& archivo, size_t offset, size_t n, vector<char>& buffer)
+{
+    ifstream binario(archivo, ios::binary);
+    if (!binario.good())
+    {
+        cout<<"Error al abrir archivo desde offset\r\n"<<endl;
+        return false;
+    }
+
+    binario.seekg(0, ios::end);
+    size_t tam = binario.tellg();
+
+    if (offset >= tam)
+    {
+        cout<<"Offset fuera de rango\r\n";
+        return false;
+    }
+
+    binario.seekg(offset, ios::beg);
+    buffer.resize(n);
+    binario.read(&buffer[0], n);
+
+    if (binario.gcount()<n)
+    {
+        cout<<"Lectura incompleta\r\n";
+        return false;
+    }
+    binario.close();
+    return true;
+}
