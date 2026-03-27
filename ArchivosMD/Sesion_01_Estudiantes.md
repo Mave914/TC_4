@@ -130,7 +130,44 @@ Use `setw` y `setprecision` para generar una tabla de al menos 3 columnas. Lea l
 
 ```cpp
 // #include <iomanip>; leer datos, luego imprimir con setw/setprecision/fixed
+void tabla(const string& entrada, const string& salida)
+{
+    ifstream e(entrada);
+    ofstream s(salida);
+    if (!e.good())
+    {
+        cout<<"Error al abrir archivo entrada\r\n";
+        return;
+    }
+    if (!s.good())
+    {
+        cout<<"Error al abrir archivo salida\r\n";
+        return;
+    }
 
+    string nombre;
+    double n1, n2;
+
+    s<<setw(15)<<"Nombre"
+    <<setw(15)<<"Nota 1"
+    <<setw(15)<<"Nota 2"<<endl;
+
+    s<<fixed<<setprecision(2);
+    while (e>>nombre>>n1>>n2)
+    {
+        if (e.fail())
+        {
+            cout<<"Error en datosr\n";
+        } else
+        {
+            s<<setw(15)<<nombre
+            <<setw(15)<<n1
+            <<setw(15)<<n2<<endl;
+        }
+    }
+    e.close();
+    s.close();
+}
 ```
 
 ---
