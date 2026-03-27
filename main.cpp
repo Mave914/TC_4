@@ -13,6 +13,13 @@ struct Registro
     double valor;
 };
 
+//Sesion 2 Ejercicio 2
+struct Registro2
+{
+    int id;
+    double valor;
+};
+
 void escribirBinario(const string& nombreArchivo);
 void leerBinario(const string& nombreArchivo);
 bool leerDesdeOffset(const string& archivo, size_t offset, size_t n, vector<char>& buffer);
@@ -29,6 +36,12 @@ void procesarNumeros(const string& entrada, const string& salida);
 
 //Sesion 1 Ejercicio 3
 void tabla (const string& entrada, const string& salida);
+
+//Sesion 2 Ejercicio 1
+void guardarLeerEnteros (const string& archivo);
+
+//Sesion 2 Ejercicio 2
+void registrosBinarios(const string& archivo);
 
 
 
@@ -199,10 +212,11 @@ int main()
     //Sesion 1 Ejercicio 3
     tabla("tabla.txt","salidaTabla.txt");
 
+    //Sesion 2 Ejercicio 1
+   // guardarLeerEnteros("enteros.bin");
 
-
-
-
+    //Sesion 2 Ejercicio 2
+    registrosBinarios("registros.bin");
 
     return 0;
 }
@@ -501,4 +515,83 @@ void tabla(const string& entrada, const string& salida)
     }
     e.close();
     s.close();
+}
+
+//Sesion 1 Ejercicio 3
+void guardarLeerEnteros(const string& archivo)
+{
+    int datos [10];
+    cout<<"Ingrese 10 numeros: "<<endl;
+    for (int i=0; i<10; i++)
+    {
+        cin>>datos[i];
+    }
+
+    ofstream s(archivo, ios::binary);
+    if (!s.good())
+    {
+        cout<<"Error al abrir archivo salida\r\n";
+        return;
+    }
+
+    s.write((char*)&datos, sizeof(datos));
+    s.close();
+
+    int copia [10];
+    ifstream e(archivo, ios::binary);
+    if (!e.good())
+    {
+        cout<<"Error al abrir archivo entrada\r\n";
+        return;
+    }
+    e.read((char*)&copia, sizeof(copia));
+    e.close();
+
+    cout<<"Datos leidos: "<<endl;
+    for (int i=0; i<10; i++)
+    {
+        cout<<copia[i]<<endl;
+    }
+}
+
+//Sesion 2 Ejercicio 2
+void registrosBinarios(const string& archivo)
+{
+    Registro2 r[3] ={
+        {1, 12},
+        {1, 20.5},
+        {3, 22.4}
+    };
+    ofstream s(archivo, ios::binary);
+    if (!s.good())
+    {
+        cout<<"Error al abrir archivo salida\r\n";
+        return;
+    }
+     for (int i=0; i<3; i++)
+     {
+         s.write((char*)&r[i], sizeof(Registro2));
+     }
+    s.close();
+
+    ifstream e(archivo, ios::binary);
+    if (!e.good())
+    {
+        cout<<"Error al abrir archivo entrada\r\n";
+        return;
+    }
+    Registro2 r2[3];
+    for (int i=0; i<3; i++)
+    {
+        e.read((char*)&r2[i], sizeof(Registro2));
+
+        if (e.fail())
+        {
+            cout<<"Error leyendo\r\n";
+        } else
+        {
+            cout<<r2[i].id<<" - "<<r2[i].valor<<endl;
+        }
+    }
+    e.close();
 }
