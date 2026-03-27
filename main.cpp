@@ -24,6 +24,10 @@ bool compararArchivo(const string& f1, const string& f2);
 //Sesion 1 Ejercicio 1
 void numerarLineas (const string& entrada, const string& salida);
 
+//Sesion 1 Ejercicio 2
+void procesarNumeros(const string& entrada, const string& salida);
+
+
 int main()
 {
 //Practica semanal Ejercicio 1
@@ -184,6 +188,13 @@ int main()
     //Sesion 1 Ejercicio 1
 
     numerarLineas("entrada.txt","salida.txt");
+
+    //Sesion 1 Ejercicio 2
+    procesarNumeros("numeros.txt","resultado.txt");
+
+
+
+
 
 
 
@@ -360,7 +371,6 @@ bool compararArchivo(const string& f1, const string& f2)
     return true;
 }
 
-
 //Sesion 1 Ejercicio 1
 void numerarLineas(const string& entrada, const string& salida)
 {
@@ -390,7 +400,59 @@ void numerarLineas(const string& entrada, const string& salida)
         }
 
     }
+    e.close();
+    s.close();
+}
 
+//Sesion 1 Ejercicio 2
+void procesarNumeros(const string& entrada, const string& salida)
+{
+    ifstream e(entrada);
+    ofstream s(salida);
+    if (!e.good())
+    {
+        cout<<"Error al abrir archivo entrada\r\n";
+        return;
+    }
+    if (!s.good())
+    {
+        cout<<"Error al abrir archivo salida\r\n";
+        return;
+    }
+    double num, suma=0, max, min;
+    int cont = 0;
+    bool primer = true;
+
+    while (e>>num)
+    {
+        if (primer)
+        {
+            max = num;
+            min = num;
+            primer = false;
+        } else
+        {
+            if (num > max) max = num;
+            if (num < min) min = num;
+        }
+        suma += num;
+        cont++;
+    }
+    if (e.fail()&& !e.eof()) {cout<<"ADVERTENCIA"<<endl;}
+    if (cont > 0)
+    {
+        double promedio = suma / cont;
+        cout<<"Promedio: "<<promedio<<endl;
+        cout<<"Maximo: "<<max<<endl;
+        cout<<"Minimo: "<<min<<endl;
+
+        s<<"Promedio: "<<promedio<<endl;
+        s<<"Maximo: "<<max<<endl;
+        s<<"Minimo: "<<min<<endl;
+    } else
+    {
+        cout<<"No hay datos"<<endl;
+    }
     e.close();
     s.close();
 }
