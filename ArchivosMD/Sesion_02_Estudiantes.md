@@ -122,6 +122,39 @@ Función que lea los primeros N bytes en un buffer. Maneje archivo no encontrado
 
 ```cpp
 // Comprobar is_open(), gcount(); main que llama y muestra resultado
+bool leerNBytes(const string& archivo, size_t n, vector<char>& buffer, size_t& leidos)
+{
+    ifstream e(archivo, ios::binary);
+    if (!e.is_open())
+    {
+        cout<<"Archivo no encontrador\n";
+        return false;
+    }
+
+    buffer.resize(n);
+    e.read(&buffer[0], n);
+    leidos = e.gcount();
+
+    if (leidos<n)
+    {
+        cout<<"Lectura incompleta\n";
+    }
+    e.close();
+    return true;
+}
+
+ //Sesion 2 Ejercicio 3
+    vector<char> buffer2;
+    size_t leidos;
+
+    if (leerNBytes("datos.bin",20, buffer2,leidos))
+    {
+        cout<<"Bytes leidos: "<<leidos<<endl;
+        for (size_t i = 0; i < leidos; i++)
+        {
+            cout<<(int)buffer2[i]<<" ";
+        }
+    }
 
 ```
 
