@@ -215,7 +215,7 @@ int main()
     tabla("tabla.txt","salidaTabla.txt");
 
     //Sesion 2 Ejercicio 1
-   // guardarLeerEnteros("enteros.bin");
+   guardarLeerEnteros("enteros.bin");
 
     //Sesion 2 Ejercicio 2
     registrosBinarios("registros.bin");
