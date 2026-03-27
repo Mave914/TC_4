@@ -70,6 +70,57 @@ Lea desde un archivo una lista de números. Calcule promedio, máximo y mínimo;
 
 ```cpp
 // Lectura con >>; comprobar good/eof/fail; track max, min, suma, count
+void procesarNumeros(const string& entrada, const string& salida)
+{
+    ifstream e(entrada);
+    ofstream s(salida);
+    if (!e.good())
+    {
+        cout<<"Error al abrir archivo entrada\r\n";
+        return;
+    }
+    if (!s.good())
+    {
+        cout<<"Error al abrir archivo salida\r\n";
+        return;
+    }
+    double num, suma=0, max, min;
+    int cont = 0;
+    bool primer = true;
+
+    while (e>>num)
+    {
+        if (primer)
+        {
+            max = num;
+            min = num;
+            primer = false;
+        } else
+        {
+            if (num > max) max = num;
+            if (num < min) min = num;
+        }
+        suma += num;
+        cont++;
+    }
+    if (e.fail()&& !e.eof()) {cout<<"ADVERTENCIA"<<endl;}
+    if (cont > 0)
+    {
+        double promedio = suma / cont;
+        cout<<"Promedio: "<<promedio<<endl;
+        cout<<"Maximo: "<<max<<endl;
+        cout<<"Minimo: "<<min<<endl;
+
+        s<<"Promedio: "<<promedio<<endl;
+        s<<"Maximo: "<<max<<endl;
+        s<<"Minimo: "<<min<<endl;
+    } else
+    {
+        cout<<"No hay datos"<<endl;
+    }
+    e.close();
+    s.close();
+}
 
 ```
 
