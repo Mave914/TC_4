@@ -27,6 +27,10 @@ void numerarLineas (const string& entrada, const string& salida);
 //Sesion 1 Ejercicio 2
 void procesarNumeros(const string& entrada, const string& salida);
 
+//Sesion 1 Ejercicio 3
+void tabla (const string& entrada, const string& salida);
+
+
 
 int main()
 {
@@ -192,6 +196,8 @@ int main()
     //Sesion 1 Ejercicio 2
     procesarNumeros("numeros.txt","resultado.txt");
 
+    //Sesion 1 Ejercicio 3
+    tabla("tabla.txt","salidaTabla.txt");
 
 
 
@@ -452,6 +458,46 @@ void procesarNumeros(const string& entrada, const string& salida)
     } else
     {
         cout<<"No hay datos"<<endl;
+    }
+    e.close();
+    s.close();
+}
+
+//Sesion 1 Ejercicio 3
+void tabla(const string& entrada, const string& salida)
+{
+    ifstream e(entrada);
+    ofstream s(salida);
+    if (!e.good())
+    {
+        cout<<"Error al abrir archivo entrada\r\n";
+        return;
+    }
+    if (!s.good())
+    {
+        cout<<"Error al abrir archivo salida\r\n";
+        return;
+    }
+
+    string nombre;
+    double n1, n2;
+
+    s<<setw(15)<<"Nombre"
+    <<setw(15)<<"Nota 1"
+    <<setw(15)<<"Nota 2"<<endl;
+
+    s<<fixed<<setprecision(2);
+    while (e>>nombre>>n1>>n2)
+    {
+        if (e.fail())
+        {
+            cout<<"Error en datosr\n";
+        } else
+        {
+            s<<setw(15)<<nombre
+            <<setw(15)<<n1
+            <<setw(15)<<n2<<endl;
+        }
     }
     e.close();
     s.close();
