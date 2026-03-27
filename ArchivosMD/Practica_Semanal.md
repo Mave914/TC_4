@@ -23,7 +23,6 @@
 
 - **Array de estructuras:** Serialice un array de al menos 5 estructuras `Registro { int id; char nombre[20]; double valor; }` en un archivo binario. El formato debe ser: primero un entero con la cantidad de registros, luego los datos. Escriba un programa separado (o función distinta) que lea ese archivo, valide la cantidad y muestre los registros. En MD documente por qué no se puede serializar directamente un `std::string` en la estructura.
 - **Lectura con offset:** Implemente una función `bool leerDesdeOffset(const string& archivo, size_t offset, size_t n, vector<char>& buffer)` que lea `n` bytes desde la posición `offset` (no desde el inicio). Maneje: archivo no encontrado, offset fuera de rango, lectura incompleta. Use `seekg` y `tellg`.
-
 **DOCUMENTACION:**
 No se puede serializar `std::string`, porque no guarda el texto dentro de la estructura como tal sino en otra parte de la memoria, es decir guarda referencias no los datos concretos. 
 ---
