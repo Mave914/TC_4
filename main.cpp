@@ -43,6 +43,8 @@ void guardarLeerEnteros (const string& archivo);
 //Sesion 2 Ejercicio 2
 void registrosBinarios(const string& archivo);
 
+//Sesion 2 Ejercicio 3
+bool leerNBytes (const string& archivo, size_t n, vector<char>& buffer, size_t& leidos);
 
 
 int main()
@@ -217,6 +219,19 @@ int main()
 
     //Sesion 2 Ejercicio 2
     registrosBinarios("registros.bin");
+
+    //Sesion 2 Ejercicio 3
+    vector<char> buffer2;
+    size_t leidos;
+
+    if (leerNBytes("datos.bin",20, buffer2,leidos))
+    {
+        cout<<"Bytes leidos: "<<leidos<<endl;
+        for (size_t i = 0; i < leidos; i++)
+        {
+            cout<<(int)buffer2[i]<<" ";
+        }
+    }
 
     return 0;
 }
@@ -517,7 +532,7 @@ void tabla(const string& entrada, const string& salida)
     s.close();
 }
 
-//Sesion 1 Ejercicio 3
+//Sesion 2 Ejercicio 1
 void guardarLeerEnteros(const string& archivo)
 {
     int datos [10];
@@ -594,4 +609,26 @@ void registrosBinarios(const string& archivo)
         }
     }
     e.close();
+}
+//Si cambia el orden o tamano, los datos no van a coincidir con los escritos y el archivo binario depende de la estructyura
+//Sesion 2 Ejercicio 3
+bool leerNBytes(const string& archivo, size_t n, vector<char>& buffer, size_t& leidos)
+{
+    ifstream e(archivo, ios::binary);
+    if (!e.is_open())
+    {
+        cout<<"Archivo no encontrador\n";
+        return false;
+    }
+
+    buffer.resize(n);
+    e.read(&buffer[0], n);
+    leidos = e.gcount();
+
+    if (leidos<n)
+    {
+        cout<<"Lectura incompleta\n";
+    }
+    e.close();
+    return true;
 }
