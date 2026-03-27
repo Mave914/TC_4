@@ -5,7 +5,7 @@
 #include <vector>
 using namespace std;
 
-//Practica semanal Ejercicio 2.1
+//Practica semanal Ejercicio 2
 struct Registro
 {
     int id;
@@ -17,9 +17,16 @@ void escribirBinario(const string& nombreArchivo);
 void leerBinario(const string& nombreArchivo);
 bool leerDesdeOffset(const string& archivo, size_t offset, size_t n, vector<char>& buffer);
 
+//Practica semanal Ejercicio 3
+bool copiarArchivo(const string& original, const string& destino, size_t bloque);
+bool compararArchivo(const string& f1, const string& f2);
+
+//Sesion 1 Ejercicio 1
+void numerarLineas (const string& entrada, const string& salida);
+
 int main()
 {
-//Practica semanal Ejercicio 1.1
+//Practica semanal Ejercicio 1
     ifstream archivo1("datos.txt");
     ofstream CSV("reporte.txt");
 
@@ -100,7 +107,7 @@ int main()
     archivo1.close();
     CSV.close();
 
-    //Practica semanal Ejercicio 1.2
+    //Practica semanal Ejercicio 1
 
     ifstream a1("archivo1.txt");
     ifstream a2("archivo2.txt");
@@ -144,6 +151,8 @@ int main()
     a2.close();
     salida.close();
 
+    //Practica semanal Ejercicio 2
+
     cout<<"Escribiendo binario"<<endl;
     escribirBinario("datos.bin");
 
@@ -163,9 +172,25 @@ int main()
         cout<<endl;
     }
 
+    //Practica semanal Ejercicio 3
+
+    cout<<"Copia por bloques"<<endl;
+    copiarArchivo("datos.bin","copia.bin",512);
+
+    cout<<"Comparador"<<endl;
+    compararArchivo("datos.bin","copia.bin");
+
+
+    //Sesion 1 Ejercicio 1
+
+    numerarLineas("entrada.txt","salida.txt");
+
+
+
     return 0;
 }
 
+//Practica semanal Ejercicio 2
 void escribirBinario(const string& nombreArchivo)
 {
     ofstream binario(nombreArchivo, ios::binary);
@@ -248,4 +273,124 @@ bool leerDesdeOffset(const string& archivo, size_t offset, size_t n, vector<char
     }
     binario.close();
     return true;
+}
+
+//Practica semanal Ejercicio 3
+bool copiarArchivo(const string& original, const string& destino, size_t bloque)
+{
+    ifstream binario(original, ios::binary);
+    if (!binario.good())
+    {
+        cout<<"Error al abrir archivo original \r\n"<<endl;
+        return false;
+    }
+
+    ofstream binSalida(destino, ios::binary);
+    if (!binSalida.good())
+    {
+        cout<<"Error al crear archivo destino \r\n"<<endl;
+        return false;
+    }
+    vector<char> buffer(bloque);
+    while (binario)
+    {
+        binario.read(&buffer[0], bloque);
+        streamsize leidos = binario.gcount();
+        if (leidos > 0)
+        {
+            binSalida.write(&buffer[0], leidos);
+        }
+    }
+    binario.clear();
+    binario.seekg(0, ios::end);
+    size_t tamO= binario.tellg();
+
+    binSalida.seekp(0, ios::end);
+    size_t tamD= binSalida.tellp();
+
+    if (tamO != tamD)
+    {
+        cout<<"Tamanos distintos\r\n";
+        return false;
+    }
+    cout<<"Copia hecha\r\n";
+    return true;
+}
+
+bool compararArchivo(const string& f1, const string& f2)
+{
+    ifstream b1(f1, ios::binary);
+    ifstream b2(f2, ios::binary);
+    if (!b1.good() || !b2.good())
+    {
+        cout<<"Error al abrir archivos\r\n"<<endl;
+        return false;
+    }
+
+    size_t posic =0;
+    size_t diferencia =0;
+    long distinta =-1;
+
+    char d1, d2;
+    while (true)
+    {
+        b1.read(&d1, 1);
+        b2.read(&d2, 1);
+
+        if (b1.gcount() ==0 && b2.gcount()==0) break;
+        if (d1 != d2)
+        {
+            diferencia++;
+            if (distinta == -1)
+            {
+                distinta = posic;
+            }
+        }
+        posic++;
+    }
+    if (diferencia == 0)
+    {
+        cout<<"Archivos identicos\r\n";
+    } else
+    {
+        cout<<"Archivos diferentes\r\n";
+        cout<<"Primera diferencia: "<<distinta<<endl;
+        cout<<"Diferencia total: "<<diferencia<<endl;
+    }
+    return true;
+}
+
+
+//Sesion 1 Ejercicio 1
+void numerarLineas(const string& entrada, const string& salida)
+{
+    ifstream e(entrada);
+    ofstream s(salida);
+    if (!e.good())
+    {
+        cout<<"Error al abrir archivo entrada\r\n";
+        return;
+    }
+
+    if (!s.good())
+    {
+        cout<<"Error al abrir archivo salida\r\n";
+        return;
+    }
+
+    string linea;
+    int cont =1;
+
+    while (getline(e,linea))
+    {
+        if (!linea.empty() && linea[0] != '#')
+        {
+            s<<cont<<". "<<linea<<endl;
+            cont++;
+        }
+
+    }
+
+    e.close();
+    s.close();
 }
