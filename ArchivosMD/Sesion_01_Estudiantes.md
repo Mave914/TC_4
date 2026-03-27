@@ -29,6 +29,39 @@ Lea un archivo de texto línea por línea y escriba en otro archivo cada línea 
 ```cpp
 // ifstream, getline, ofstream; verificar linea.empty(), linea[0]=='#'
 
+void numerarLineas(const string& entrada, const string& salida)
+{
+    ifstream e(entrada);
+    ofstream s(salida);
+    if (!e.good())
+    {
+        cout<<"Error al abrir archivo entrada\r\n";
+        return;
+    }
+
+    if (!s.good())
+    {
+        cout<<"Error al abrir archivo salida\r\n";
+        return;
+    }
+
+    string linea;
+    int cont =1;
+
+    while (getline(e,linea))
+    {
+        if (!linea.empty() && linea[0] != '#')
+        {
+            s<<cont<<". "<<linea<<endl;
+            cont++;
+        }
+
+    }
+
+    e.close();
+    s.close();
+}
+
 ```
 
 ### Ejercicio 2: Estadísticas de números en archivo
